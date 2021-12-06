@@ -1,0 +1,3 @@
+applescript==2021.2.9
+pandas==1.3.4
+requests==2.26.0

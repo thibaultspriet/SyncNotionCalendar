@@ -1,0 +1,7 @@
+__pycache__
+.DS_STORE
+.env
+test.py
+config.ini
+logs/*
+databases/*
