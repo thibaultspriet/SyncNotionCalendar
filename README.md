@@ -24,11 +24,39 @@ In this section, I go through all the necessary steps to set up the project on y
 
 If the previous requirements are fulfilled then follow these steps :
 
-1. Clone the repository in your desired location
+1. Clone the repository in your desired location  
+    A repository is like a folder on GitHub. This repository contains all the code needed to run the project.  
+    To get the repository on your computer you need to clone it, this will download a copy of all files on your computer. To do so :  
+    1. Open up your Terminal application
+    1. Check if git is installed :
+        ```shell
+        git --version
+        ``` 
+        You should get output like :
+
+        ```shell
+        git version 2.32.0 (Apple Git-132)
+        ```
+        Otherwise check the [official documentation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to install the git client.
+    1. Move to your desired location
+        
+        Inside your terminal app **cd** to the location where you want to clone the repository
+        
+        As matter of example :
+        
+        ```shell
+        cd /Users/sprietthibault/scripts/
+        ```
+    
+    1. Clone the repository
+
+    ```shell
+    git clone https://github.com/thibaultspriet/SyncNotionCalendar.git
+    ```
 1. In your python environment run :
-```shell
-pip install -r requirements.txt
-```
+    ```shell
+    pip install -r requirements.txt
+    ```
 
 ### Notion integration
 
