@@ -5,3 +5,4 @@ test.py
 config.ini
 logs/*
 databases/*
+databases_test

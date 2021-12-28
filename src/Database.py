@@ -24,7 +24,16 @@ class Database():
         if os.path.exists(self._path):
             self.df = pd.read_csv(self._path,index_col='id',parse_dates=['last_edit','start_date','end_date'])
         else:
-            df = pd.DataFrame(columns=[
+            self.df = self._empty()
+            self.save()
+
+    def _empty(self) -> pd.DataFrame:
+        """Returns an empty DataFrame with the right columns and index
+
+        Returns:
+            pd.DataFrame: dataframe
+        """
+        df = pd.DataFrame(columns=[
                 'id',
                 'last_edit',
                 'start_date',
@@ -32,8 +41,7 @@ class Database():
                 'title',
                 'event_id'
             ]).set_index('id')
-            self.df = df
-            self.save()
+        return df
 
     def save(self)->None:
         """Saves the database as a .csv file
@@ -61,7 +69,10 @@ class Database():
         """
         current_cards = self.notion_client.get_live_cards(self.id)
         current_as_dict = list(map(lambda card : card.to_dict(),current_cards))
-        return pd.DataFrame(current_as_dict).set_index('id')
+        if len(current_as_dict) > 0:
+            return pd.DataFrame(current_as_dict).set_index('id')
+        else:
+            return self._empty()
 
     def get_outdated(self)->List:
         """Returns a list of index that correspond to finished events in the database 
