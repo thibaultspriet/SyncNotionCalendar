@@ -60,7 +60,22 @@ If the previous requirements are fulfilled then follow these steps :
 
 ### Notion integration
 
-You will have to create an internal integration in the Notion app. If you want to know how to get the Notion integration token, more info [here](https://developers.notion.com/docs/authorization).  
+You will have to create an internal integration in the Notion app. If you want to know how to get the Notion integration token, more info [here](https://developers.notion.com/docs/authorization). Here is a simple step by step tutorial to create an integration and get the corresponding token. This token will be needed for what follows.
+
+1. From Notion go to **settings & members**. 
+
+    ![](./img/settings%20&%20members.png)
+1. From the pop-up click on **integrations**
+    ![](./img/integrations.png)
+1. Then click on the link where you can read "**Develop your own integrations**"
+    ![](./img/develop.png)
+    It should open up a new window inside your browser. From here you may need to connect to your account.
+1. Click on **new integration**
+    ![](./img/new.png)
+    Give it a name and associate it with a workspace. Finally click submit.
+1. You should be able to show you integration token. Keep it somewhere you will need it later.
+
+The final step is to share your integration with the database you want to link with Apple calendar. To do so, come back to Notion and open your database as a page. In the top right corner, press **share**, click on the text box and you should be able to select your integration. Finally, click **invite**
 
 ### Config file
 
@@ -78,13 +93,13 @@ APPLE_CALENDAR=<Name of your Apple Calendar>
 
 You can add as many as you want **DATABASES** entries.
 
-💡 do not forget to share your database to your integration
-
 ### Crontab job
 
 Once you have done all the previous tasks, you only need to create a crontab job to run your task with the frequency you want.
 
 Firstly edit [this script](./syncNotionCalendar.zsh) with your python interpreter path and your actual path to [main.py](./main.py)
+
+💡 To know your python interpreter path : ```which python```
 
 Then open up a terminal and create a crontab job as follow :
 
