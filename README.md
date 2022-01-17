@@ -109,12 +109,18 @@ crontab -e
 
 It will open a vim editor.
 
-Write : * * * * * cd <absolute path to the project> && <./syncNotionCalendar.zsh>
+Write : * * * * * cd \<absolute path to the project\> && ./syncNotionCalendar.zsh
 
 You can edit * * * * * to configure when to run the job.
 
-💡 use [this site](https://crontab.guru) to generate the command.
+💡 use [this site](https://crontab.guru) to generate the command.  
+
+As matter of example, I run my script once per hour everyday between 8:00 am and 10:00pm. My crontab file look like :
+
+```shell
+0 8-22 * * * cd ~/scripts/notion-ical && ./syncNotionCalendar.zsh
+```
 
 ## Questions
 
-In case you have a question, feel free to email me to [thibaultspriet@outlook.fr](mailto:thibaultspriet@outlook.fr)
+In case you have a question, feel free to email me to [thibaultspriet@outlook.fr](mailto:thibaultspriet@outlook.fr) or open an issue.
