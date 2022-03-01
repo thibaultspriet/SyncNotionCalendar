@@ -11,7 +11,8 @@ if __name__ == "__main__":
     # Remove all handlers associated with the root logger object.
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
-    logging.basicConfig(filename=log_file, level=logging.INFO)
+    with open(log_file,'a') as f_ : pass # Create the log file
+    logging.basicConfig(filename=log_file, filemode='a', level=logging.INFO)
 
     log_files = os.listdir(os.path.join(cwd,'logs'))
     def file_today(file,date):
