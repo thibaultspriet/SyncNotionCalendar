@@ -3,18 +3,16 @@ import os
 from datetime import datetime
 import logging
 from configparser import ConfigParser
+from glob import glob
 
 if __name__ == "__main__":
     start_datetime = datetime.now()
     cwd = os.path.dirname(os.path.abspath(__file__))
     log_file = os.path.join(cwd,'logs',f"{start_datetime.strftime('%Y-%m-%dT%H:%M:%S')}.log")
-    # Remove all handlers associated with the root logger object.
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    with open(log_file,'a') as f_ : pass # Create the log file
+    
     logging.basicConfig(filename=log_file, filemode='a', level=logging.INFO)
 
-    log_files = os.listdir(os.path.join(cwd,'logs'))
+    log_files = glob(os.path.join(cwd,'logs','*.log'))
     def file_today(file,date):
         file_day = int(file.split('T')[0].split('-')[-1])
         return file_day != date.day
