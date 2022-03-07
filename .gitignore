@@ -4,5 +4,5 @@ __pycache__
 test.py
 config.ini
 logs/*.log
-databases/*
+databases/*.csv
 databases_test
