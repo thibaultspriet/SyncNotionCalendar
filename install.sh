@@ -14,5 +14,8 @@ echo -e "#!/bin/zsh\n$ZSH_SCRIPT" > syncNotionCalendar.zsh
 
 $PYTHON_PATH src/init_conf.py config_test.ini
 $PYTHON_PATH src/init_cron.py
+echo "Synchronisation of your databases ...."
+./syncNotionCalendar.zsh
+echo "Installation done"
 
 
