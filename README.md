@@ -80,3 +80,7 @@ Follow the steps prompted in the terminal. If a pop-up appear you can accept.
 ## Questions
 
 In case you have a question, feel free to email me to [thibaultspriet@outlook.fr](mailto:thibaultspriet@outlook.fr) or open an issue.
+
+## Sponsorship  
+
+If you find this project interesting and handy, you can support me on [Patreon](https://patreon.com/code_tibo). I would be really grateful !
