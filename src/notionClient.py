@@ -95,6 +95,9 @@ class NotionClient:
         Returns:
             List[Card]: list of cards
         """
+        has_more = True
+        _list_page = []
+        start_cursor = None
         _url = f"{self._base_url}databases/{database_id}/query"
         payload = {
             "filter": {
@@ -102,13 +105,18 @@ class NotionClient:
                 "date": {
                     "on_or_after": datetime.now().strftime("%Y-%m-%d")
                 }
-            }
+            },
         }
-        q = requests.post(_url, headers=self._headers, json=payload)
-        try:
-            _list_page = q.json()['results']
-        except:
-            logging.error('while fetching cards on Notion : {q.text}')
-            raise Exception(q.text)
+        while has_more:
+            if start_cursor:
+                payload['start_cursor'] = start_cursor
+            q = requests.post(_url, headers=self._headers, json=payload)
+            try:
+                _list_page += q.json()['results']
+            except:
+                logging.error('while fetching cards on Notion : {q.text}')
+                raise Exception(q.text)
+            has_more = q.json()['has_more']
+            start_cursor = q.json()['next_cursor']
         _list_card = [Card(page) for page in _list_page]
         return _list_card
