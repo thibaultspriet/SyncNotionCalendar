@@ -1,10 +1,12 @@
 import applescript
 import logging
 
-class CalendarClient():
+
+class CalendarClient:
     """Class that handles applescript requests to Calendar app
     """
-    def __init__(self,calendar_name:str) -> None:
+
+    def __init__(self, calendar_name: str) -> None:
         """Constructor
 
         Args:
@@ -15,7 +17,7 @@ class CalendarClient():
     def __repr__(self) -> str:
         return f"calendar {self.name}"
 
-    def add_event(self,title:str,start_date:str,end_date:str,start_time:str,end_time:str) -> str:
+    def add_event(self, title: str, start_date: str, end_date: str, start_time: str, end_time: str) -> str:
         """Adds an event to Calendar
         Summary is set to `title` and we define the start datetime and end datetime with the provided arguments
 
@@ -29,25 +31,32 @@ class CalendarClient():
         Returns:
             str : Id of the newly created event
         """
-        y,m,d = start_date.split('-')
-        cmd = f'set theStartDate to date "{d}-{m}-{y}"'
-        
-        h,m,s = start_time.split(':')
+        y, m, d = start_date.split('-')
+        cmd = f"""
+        set theStartDate to current date
+        set day of theStartDate to {d}
+        set month of theStartDate to {m}
+        set year of theStartDate to {y}
+        """
+
+        h, m, s = start_time.split(':')
         set_start_hour = f"""
         set hours of theStartDate to {h}
         set minutes of theStartDate to {m}
         set seconds of theStartDate to {s}
         """
         cmd += f'{set_start_hour}'
-        
-        y,m,d = end_date.split('-')
+
+        y, m, d = end_date.split('-')
         set_end_date = f"""
-        set theEndDate to date "{d}-{m}-{y}"
+        set theEndDate to current date
+        set day of theEndDate to {d}
+        set month of theEndDate to {m}
+        set year of theEndDate to {y}
         """
         cmd += f'{set_end_date}'
 
-        
-        h,m,s = end_time.split(':')
+        h, m, s = end_time.split(':')
         set_end_hour = f"""
         set hours of theEndDate to {h}
         set minutes of theEndDate to {m}
@@ -71,7 +80,7 @@ class CalendarClient():
             logging.error(f"failed to add {title} to {self.name} calendar. Applescript error : {r.err}")
             raise Exception(f"error while creating an event in {self.name} calendar")
 
-    def delete_event(self,id:str)->None:
+    def delete_event(self, id: str) -> None:
         """Remove event with id from Calendar
 
         Args:
