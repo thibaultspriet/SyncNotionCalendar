@@ -79,7 +79,7 @@ Follow the steps prompted in the terminal. If a pop-up appear you can accept.
 
 ## Questions
 
-In case you have a question, feel free to email me to [thibaultspriet@outlook.fr](mailto:thibaultspriet@outlook.fr) or open an issue.
+In case you have a question, feel free to open an [issue](https://github.com/thibaultspriet/SyncNotionCalendar/issues/new/choose).
 
 ## Sponsorship  
 
