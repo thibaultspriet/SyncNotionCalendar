@@ -60,11 +60,11 @@ class Card:
         tmp = notion_datetime.split('T')
         if len(tmp) == 1:
             fulldt = datetime.strptime(f'{tmp[0]} 00:00:00', '%Y-%m-%d %H:%M:%S')
-            return (fulldt.date, None)
+            return (fulldt.date(), None)
         else:
             time = tmp[1][:8]
             fulldt = datetime.strptime(f'{tmp[0]} {time}', '%Y-%m-%d %H:%M:%S')
-            return (fulldt.date, fulldt.time)
+            return (fulldt.date(), fulldt.time())
 
 
 class NotionClient:
