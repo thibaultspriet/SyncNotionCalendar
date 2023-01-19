@@ -23,8 +23,8 @@ class Card:
         self._id = page['id']
         self.title = page.get('properties').get('Name').get('title')[0].get('plain_text')
         self.last_edited_time = self._convert_datetime(page.get('last_edited_time'))
-        self.start_date = self._convert_datetime(page.get('properties').get('date').get('date').get('start'))
-        self.end_date = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
+        (self.start_date, self.start_time) = self._convert_datetime(page.get('properties').get('date').get('date').get('start'))
+        (self.end_date, self.end_time) = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
 
     def to_dict(self) -> Dict:
         """Returns a representation of the card object as a Dict
@@ -36,7 +36,9 @@ class Card:
             'id': self._id,
             'last_edit': self.last_edited_time,
             'start_date': self.start_date,
+            'start_time': self.start_time,
             'end_date': self.end_date,
+            'end_time': self.end_time,
             'title': self.title
         }
         return _dict
