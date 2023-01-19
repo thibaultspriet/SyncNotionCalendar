@@ -42,15 +42,20 @@ class CalendarClient:
 
         if (start_time == 'None'):
 
+            if_all_day = f"""
+            set isAllDay to true
+            """
+            cmd += f'{if_all_day}'
+
             if (end_date == 'None'):
 
-                cmd += f"""
-                tell application "Calendar"
-                    tell calendar "{self.name}"
-                        make new event with properties {{summary:"{title}", start date:theStartDate, allday event:true }}
-                    end tell
-                end tell
+                set_end_date = f"""
+                set theEndDate to current date
+                set day of theEndDate to {d}
+                set month of theEndDate to {m}
+                set year of theEndDate to {y}
                 """
+                cmd += f'{set_end_date}'
 
             else:
 
@@ -62,16 +67,13 @@ class CalendarClient:
                 set year of theEndDate to {y}
                 """
                 cmd += f'{set_end_date}'
-                
-                cmd += f"""
-                tell application "Calendar"
-                    tell calendar "{self.name}"
-                        make new event with properties {{summary:"{title}", start date:theStartDate, end date:theEndDate, allday event:true }}
-                    end tell
-                end tell
-                """
             
         else:
+
+            if_all_day = f"""
+            set isAllDay to false
+            """
+            cmd += f'{if_all_day}'
 
             h, m, s = start_time.split(':')
             set_start_hour = f"""
@@ -102,13 +104,14 @@ class CalendarClient:
             """
             cmd += f'{set_end_hour}'
 
-            cmd += f"""
-            tell application "Calendar"
-                tell calendar "{self.name}"
-                    make new event with properties {{summary:"{title}", start date:theStartDate, end date:theEndDate}}
-                end tell
+            
+        cmd += f"""
+        tell application "Calendar"
+            tell calendar "{self.name}"
+                make new event with properties {{summary:"{title}", start date:theStartDate, end date:theEndDate, allday event:isAllDay}}
             end tell
-            """
+        end tell
+        """
 
         r = applescript.run(cmd)
         if r.out:
