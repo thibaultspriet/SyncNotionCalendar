@@ -37,7 +37,9 @@ class Database():
                 'id',
                 'last_edit',
                 'start_date',
+                'start_time',
                 'end_date',
+                'end_time',
                 'title',
                 'event_id'
             ]).set_index('id')
@@ -55,9 +57,10 @@ class Database():
             card_serie (pd.Series): series that corresponds to a Notion card
         """
         title = card_serie.title
-        start,end = str(card_serie.start_date),str(card_serie.end_date)
-        start_date,start_time = start.split()
-        end_date,end_time = end.split()
+        start_date = str(card_serie.start_date)
+        start_time = str(card_serie.start_time)
+        end_date = str(card_serie.end_date)
+        end_time = str(card_serie.end_time)
         return (title,start_date,end_date,start_time,end_time)
 
     def get_live(self)->pd.DataFrame:
