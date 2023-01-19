@@ -24,11 +24,7 @@ class Card:
         self.title = page.get('properties').get('Name').get('title')[0].get('plain_text')
         self.last_edited_time = self._convert_datetime(page.get('last_edited_time'))
         self.start_date = self._convert_datetime(page.get('properties').get('date').get('date').get('start'))
-        end_date = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
-        if end_date is None:
-            self.end_date = self.start_date
-        else:
-            self.end_date = end_date
+        self.end_date = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
 
     def to_dict(self) -> Dict:
         """Returns a representation of the card object as a Dict
