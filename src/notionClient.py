@@ -1,5 +1,5 @@
 import requests
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from datetime import datetime
 import logging
 
@@ -44,23 +44,25 @@ class Card:
     def __repr__(self) -> str:
         return f"id : {self._id}\ntitle : {self.title}\nstart : {self.start_date}\nend : {self.end_date}\nlast edit : {self.last_edited_time}"
 
-    def _convert_datetime(self, notion_datetime: str) -> datetime:
+    def _convert_datetime(self, notion_datetime: str) -> Tuple:
         """Helpher function to normalize datetimes
 
         Args:
             notion_datetime (str): datetime
 
         Returns:
-            datetime: datetime
+            (date, time): (datetime.date, datetime.time)
         """
         if notion_datetime is None:
-            return notion_datetime
+            return (notion_datetime, notion_datetime)
         tmp = notion_datetime.split('T')
         if len(tmp) == 1:
-            return datetime.strptime(f'{tmp[0]} 00:00:00', '%Y-%m-%d %H:%M:%S')
+            fulldt = datetime.strptime(f'{tmp[0]} 00:00:00', '%Y-%m-%d %H:%M:%S')
+            return (fulldt.date, None)
         else:
             time = tmp[1][:8]
-            return datetime.strptime(f'{tmp[0]} {time}', '%Y-%m-%d %H:%M:%S')
+            fulldt = datetime.strptime(f'{tmp[0]} {time}', '%Y-%m-%d %H:%M:%S')
+            return (fulldt.date, fulldt.time)
 
 
 class NotionClient:
