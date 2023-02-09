@@ -83,7 +83,10 @@ class Database():
         Returns:
             List: list of index
         """
-        outdated = list(self.df[self.df.end_date.dt.date < datetime.now().date()].index)
+        compare_dt = pd.Series(self.df.end_date)
+        compare_dt.loc[self.df.end_date.isnull()] = self.df.start_date
+    
+        outdated = list(self.df[compare_dt.dt.date < datetime.now().date()].index)
         logging.info(f"{len(outdated)} outdated events found")
         for id in outdated:
             logging.info(f"{id} is outdated")
