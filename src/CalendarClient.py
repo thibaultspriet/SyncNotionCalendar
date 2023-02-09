@@ -24,13 +24,14 @@ class CalendarClient:
         Args:
             title (str): title of notion card. Will be used for the calendar summary
             start_date (str) : format `%Y-%m-%d`
-            end_date (str) : format `%Y-%m-%d`
-            start_time (str) : format `%H:%M:%S`
-            end_time (str) : format `%H:%M:%S`
+            end_date (str) : format `%Y-%m-%d` or 'None'
+            start_time (str) : format `%H:%M:%S` or 'None'
+            end_time (str) : format `%H:%M:%S` or 'None'
         
         Returns:
             str : Id of the newly created event
         """
+
         y, m, d = start_date.split('-')
         cmd = f"""
         set theStartDate to current date
@@ -39,38 +40,79 @@ class CalendarClient:
         set year of theStartDate to {y}
         """
 
-        h, m, s = start_time.split(':')
-        set_start_hour = f"""
-        set hours of theStartDate to {h}
-        set minutes of theStartDate to {m}
-        set seconds of theStartDate to {s}
-        """
-        cmd += f'{set_start_hour}'
+        if (start_time == 'None'):
 
-        y, m, d = end_date.split('-')
-        set_end_date = f"""
-        set theEndDate to current date
-        set day of theEndDate to {d}
-        set month of theEndDate to {m}
-        set year of theEndDate to {y}
-        """
-        cmd += f'{set_end_date}'
+            if_all_day = f"""
+            set isAllDay to true
+            """
+            cmd += f'{if_all_day}'
 
-        h, m, s = end_time.split(':')
-        set_end_hour = f"""
-        set hours of theEndDate to {h}
-        set minutes of theEndDate to {m}
-        set seconds of theEndDate to {s}
-        """
-        cmd += f'{set_end_hour}'
+            if (end_date == 'None'):
 
+                set_end_date = f"""
+                set theEndDate to current date
+                set day of theEndDate to {d}
+                set month of theEndDate to {m}
+                set year of theEndDate to {y}
+                """
+                cmd += f'{set_end_date}'
+
+            else:
+
+                y, m, d = end_date.split('-')
+                set_end_date = f"""
+                set theEndDate to current date
+                set day of theEndDate to {d}
+                set month of theEndDate to {m}
+                set year of theEndDate to {y}
+                """
+                cmd += f'{set_end_date}'
+            
+        else:
+
+            if_all_day = f"""
+            set isAllDay to false
+            """
+            cmd += f'{if_all_day}'
+
+            h, m, s = start_time.split(':')
+            set_start_hour = f"""
+            set hours of theStartDate to {h}
+            set minutes of theStartDate to {m}
+            set seconds of theStartDate to {s}
+            """
+            cmd += f'{set_start_hour}'
+
+            y, mo, d = start_date.split('-')
+
+            if (end_date != 'None'):
+                y, mo, d = end_date.split('-')
+                h, m, s = end_time.split(':')
+
+            set_end_date = f"""
+            set theEndDate to current date
+            set day of theEndDate to {d}
+            set month of theEndDate to {mo}
+            set year of theEndDate to {y}
+            """
+            cmd += f'{set_end_date}'
+
+            set_end_hour = f"""
+            set hours of theEndDate to {h}
+            set minutes of theEndDate to {m}
+            set seconds of theEndDate to {s}
+            """
+            cmd += f'{set_end_hour}'
+
+            
         cmd += f"""
         tell application "Calendar"
             tell calendar "{self.name}"
-                make new event with properties {{summary:"{title}", start date:theStartDate, end date:theEndDate}}
+                make new event with properties {{summary:"{title}", start date:theStartDate, end date:theEndDate, allday event:isAllDay}}
             end tell
         end tell
         """
+
         r = applescript.run(cmd)
         if r.out:
             event_id = r.out.split()[2]

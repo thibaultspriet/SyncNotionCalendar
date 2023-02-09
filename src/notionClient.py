@@ -1,5 +1,5 @@
 import requests
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from datetime import datetime
 import logging
 
@@ -23,12 +23,8 @@ class Card:
         self._id = page['id']
         self.title = page.get('properties').get('Name').get('title')[0].get('plain_text')
         self.last_edited_time = self._convert_datetime(page.get('last_edited_time'))
-        self.start_date = self._convert_datetime(page.get('properties').get('date').get('date').get('start'))
-        end_date = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
-        if end_date is None:
-            self.end_date = self.start_date
-        else:
-            self.end_date = end_date
+        (self.start_date, self.start_time) = self._convert_datetime(page.get('properties').get('date').get('date').get('start'))
+        (self.end_date, self.end_time) = self._convert_datetime(page.get('properties').get('date').get('date').get('end'))
 
     def to_dict(self) -> Dict:
         """Returns a representation of the card object as a Dict
@@ -40,7 +36,9 @@ class Card:
             'id': self._id,
             'last_edit': self.last_edited_time,
             'start_date': self.start_date,
+            'start_time': self.start_time,
             'end_date': self.end_date,
+            'end_time': self.end_time,
             'title': self.title
         }
         return _dict
@@ -48,23 +46,25 @@ class Card:
     def __repr__(self) -> str:
         return f"id : {self._id}\ntitle : {self.title}\nstart : {self.start_date}\nend : {self.end_date}\nlast edit : {self.last_edited_time}"
 
-    def _convert_datetime(self, notion_datetime: str) -> datetime:
+    def _convert_datetime(self, notion_datetime: str) -> Tuple:
         """Helpher function to normalize datetimes
 
         Args:
             notion_datetime (str): datetime
 
         Returns:
-            datetime: datetime
+            (date, time): (datetime.date, datetime.time)
         """
         if notion_datetime is None:
-            return notion_datetime
+            return (notion_datetime, notion_datetime)
         tmp = notion_datetime.split('T')
         if len(tmp) == 1:
-            return datetime.strptime(f'{tmp[0]} 00:00:00', '%Y-%m-%d %H:%M:%S')
+            fulldt = datetime.strptime(f'{tmp[0]} 00:00:00', '%Y-%m-%d %H:%M:%S')
+            return (fulldt.date(), None)
         else:
             time = tmp[1][:8]
-            return datetime.strptime(f'{tmp[0]} {time}', '%Y-%m-%d %H:%M:%S')
+            fulldt = datetime.strptime(f'{tmp[0]} {time}', '%Y-%m-%d %H:%M:%S')
+            return (fulldt.date(), fulldt.time())
 
 
 class NotionClient:
